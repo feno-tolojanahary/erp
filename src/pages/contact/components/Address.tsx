@@ -1,7 +1,6 @@
 import React from 'react';
 import { 
     TextField,
-    Box,
     Select,
     MenuItem
 } from '@mui/material';
@@ -37,7 +36,7 @@ const Address = () => {
                     label="Street 2"
                 />
                 <div
-                    className='w-full flex flex-row'
+                    className='w-full flex flex-roc xl:²w'
                 >
                     <TextField
                         id="outlined-required"
