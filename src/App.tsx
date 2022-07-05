@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from './layout/Header'
 import Contact from './pages/contact';
-import SidebarHeader from './layout/SidebarHeader';
+import NavBar from './layout/NavBar';
 
 const App = () => {
 
@@ -9,7 +9,7 @@ const App = () => {
     <>
       <Header></Header>
       
-      <SidebarHeader/>
+      <NavBar/>
             
       <Contact/>
     </>

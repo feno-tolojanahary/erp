@@ -3,12 +3,12 @@ import {
     Button
 } from '@mui/material';
 
-const SidebarHeader = () => {
+const NavBar = () => {
     return (
-        <div className='w-full m-2 flex justify-items-end	'>
+        <div className='w-full m-2 flex justify-items-end'>
             <Button className="flex" variant="contained">Create</Button>
         </div>
     )
 }
 
-export default SidebarHeader;
+export default NavBar;

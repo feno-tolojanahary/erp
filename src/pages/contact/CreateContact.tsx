@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
     TextField,
     Box,
@@ -8,15 +8,33 @@ import {
     MenuItem,
     RadioGroup,
     FormControlLabel,
-    Radio
+    Radio,
+    Button
 } from '@mui/material';
 import Address from "./components/Address";
+import { useAppDispatch, useAppSelector } from '../../store/app/hooks';
+import { updateNavAction } from '../../store/slices/navAction';
 
 type propsType = {
 
 }
 
 const CreateContactPage : React.FC<propsType> = (props: propsType) => {
+    const navAction = useAppSelector((state) => state.navAction);
+    const dispatch = useAppDispatch();
+
+    const changeActionState = () => {
+        console.log("principal value: ", navAction);
+        dispatch(updateNavAction({
+            button: "listing",
+            page: 'newContact'
+        }))
+    }
+
+    useEffect(() => {
+        console.log("nav action change: ", navAction);
+    }, [navAction])
+
     return (
         <>
             
@@ -108,6 +126,11 @@ const CreateContactPage : React.FC<propsType> = (props: propsType) => {
                             </div>
                         </div>
                     </Box>
+                    <Button
+                        onClick={changeActionState}
+                    >
+                        Change Action state
+                    </Button>
                 </div>
             </div>
         </>
