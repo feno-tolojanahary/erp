@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import { 
     TextField,
     Box,
@@ -11,29 +11,30 @@ import {
     Radio,
     Button
 } from '@mui/material';
+import { useForm } from "react-hook-form";
 import Address from "./components/Address";
-import { useAppDispatch, useAppSelector } from '../../store/app/hooks';
-import { updateNavAction } from '../../store/slices/navAction';
+import { ActionsContext, NavAction } from '../../context/actions';
 
 type propsType = {
-
+    setNavAction: Dispatch<SetStateAction<NavAction>>
 }
 
 const CreateContactPage : React.FC<propsType> = (props: propsType) => {
-    const navAction = useAppSelector((state) => state.navAction);
-    const dispatch = useAppDispatch();
-
-    const changeActionState = () => {
-        console.log("principal value: ", navAction);
-        dispatch(updateNavAction({
-            button: "listing",
-            page: 'newContact'
-        }))
-    }
+    const formRef = useRef<HTMLFormElement | null>(null);
+    const { handleSubmit } = useForm();
 
     useEffect(() => {
-        console.log("nav action change: ", navAction);
-    }, [navAction])
+        props.setNavAction({
+            button: "create",
+            page: 'contact',
+            prevUrl: '/contact',
+            formRef: formRef
+        })
+    }, [formRef])                             
+    
+    const onSubmit = () => {
+        console.log("The form is submited")
+    }
 
     return (
         <>
@@ -57,7 +58,9 @@ const CreateContactPage : React.FC<propsType> = (props: propsType) => {
                         }}
                         noValidate
                         autoComplete="off"
+                        onSubmit={handleSubmit(onSubmit)}
                         className='w-full flex flex-col'
+                        ref={formRef}
                         >
                         <div className='w-[60%] mt-10'>
                             <TextField
@@ -109,7 +112,7 @@ const CreateContactPage : React.FC<propsType> = (props: propsType) => {
                                     id="outlined-required"
                                     label="Website"
                                 />
-                                <FormControl fullWidth>
+                                {/* <FormControl fullWidth>
                                     <InputLabel id="demo-simple-select-label">Title</InputLabel>
                                     <Select
                                         labelId="demo-simple-select-label"
@@ -122,12 +125,11 @@ const CreateContactPage : React.FC<propsType> = (props: propsType) => {
                                         <MenuItem value={20}>Madam</MenuItem>
                                         <MenuItem value={30}>Miss</MenuItem>
                                     </Select>
-                                </FormControl>
+                                </FormControl> */}
                             </div>
                         </div>
                     </Box>
                     <Button
-                        onClick={changeActionState}
                     >
                         Change Action state
                     </Button>
@@ -137,4 +139,12 @@ const CreateContactPage : React.FC<propsType> = (props: propsType) => {
     )
 }
 
-export default CreateContactPage;
+export default function ContainerCreateContactPage() {
+    return (
+        <ActionsContext.Consumer>
+            {({setNavAction}) => 
+                <CreateContactPage setNavAction={setNavAction} />
+            }
+        </ActionsContext.Consumer>
+    )
+};

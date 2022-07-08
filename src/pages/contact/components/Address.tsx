@@ -11,7 +11,7 @@ const Address = () => {
             className='w-full flex flex-row'
         >
             <div className="basis-1/3">
-                <Select
+                {/* <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     // value={age}
@@ -22,7 +22,7 @@ const Address = () => {
                     <MenuItem value={10}>Address1</MenuItem>
                     <MenuItem value={20}>Address2</MenuItem>
                     <MenuItem value={30}>Address3</MenuItem>
-                </Select>
+                </Select> */}
             </div>
             <div className="basis-2/3">
                 <TextField
