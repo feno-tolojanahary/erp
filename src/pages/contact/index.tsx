@@ -1,17 +1,15 @@
 import React from 'react';
-import CreateContactPage from './CreateContact';
+import { ActionsContext } from '@context/actions';
+import Contacts from "./Contacts"
 
-type propsType = {
-
-}
-
-const Contact : React.FC<propsType> = (props: propsType) => {
-
+function ContainerContacts() {
     return (
-        <>
-            <CreateContactPage/>
-        </>
-    );
+        <ActionsContext.Consumer>
+            {( { setNavAction } ) => 
+                <Contacts setNavAction={setNavAction} />
+            }
+        </ActionsContext.Consumer>
+    )
 }
 
-export default Contact;
+export default ContainerContacts;

@@ -1,28 +1,20 @@
 import React from 'react';
 import { 
-    TextField,
-    Select,
-    MenuItem
+    TextField
 } from '@mui/material';
+import SelectWithService from '@components/SelectWithService';
+import SelectSimple from "@components/SelectSimple";
+import ModalState from './modal/ModalState';
 
-const Address = () => {
+const AddressForm = () => {
     return (
         <div
-            className='w-full flex flex-row'
+            className='w-full flex flex-row justify-between'
         >
-            <div className="basis-1/3">
-                {/* <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    // value={age}
-                    label="Address"
-                    className="min-w-[200px] mt-[8px]"
-                    // onChange={handleChange}
-                >
-                    <MenuItem value={10}>Address1</MenuItem>
-                    <MenuItem value={20}>Address2</MenuItem>
-                    <MenuItem value={30}>Address3</MenuItem>
-                </Select> */}
+            <div className="basis-1/3 pr-2">
+                <SelectWithService 
+                    path="addressTypes"
+                />
             </div>
             <div className="basis-2/3">
                 <TextField
@@ -43,10 +35,15 @@ const Address = () => {
                         className='w-full'
                         label="City"
                     />
-                    <TextField
+                    {/* <TextField
                         id="outlined-required"
                         className='w-full'
                         label="State"
+                    /> */}
+                    <SelectSimple 
+                        optionList={[]}
+                        hasSearchMore
+                        modalSearch={ModalState}
                     />
                     <TextField
                         id="outlined-required"
@@ -64,4 +61,4 @@ const Address = () => {
     )
 }
 
-export default Address;
+export default AddressForm;

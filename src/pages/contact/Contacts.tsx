@@ -1,11 +1,12 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
-import { NavAction, ActionsContext } from '../../context/actions';
+import { NavAction } from '@context/actions';
+import CardContact from './components/CardContact';
 
 type propsType = {
     setNavAction:  Dispatch<SetStateAction<NavAction>>
 }
 
-function Contacts(props: propsType) {
+export default function Contacts(props: propsType) {
     
     useEffect(() => {
         props.setNavAction({
@@ -17,17 +18,22 @@ function Contacts(props: propsType) {
     return (
         <div>
             <h1>List of contact</h1>
+            <div className="grid grid-cols-5 gap-4">
+                <CardContact />
+                <CardContact />
+                <CardContact />
+                <CardContact />
+                <CardContact />
+                <CardContact />
+                <CardContact />
+                <CardContact />
+                <CardContact />
+                <CardContact />
+                <CardContact />
+                <CardContact />
+            </div>
         </div>
     )
 }
 
-export default function ContainerContacts() {
-    return (
-        <ActionsContext.Consumer>
-            {( { setNavAction } ) => 
-                <Contacts setNavAction={setNavAction} />
-            }
-        </ActionsContext.Consumer>
-    )
-}
 

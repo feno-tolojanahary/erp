@@ -13,12 +13,12 @@ const NavBar = (props: propsType) => {
     const navigate = useNavigate();
 
     const submitForm = () => {
-        if (props.navAction?.formRef?.current) props.navAction.formRef.current.submit();
+        if (props.navAction?.formButtonRef?.current) props.navAction.formButtonRef.current.click();
     }
 
     return (
         <>
-            <div className='w-full m-2 flex justify-items-end '>
+            <div className='w-48 m-2 flex justify-items-end justify-between'>
                 { 
                     {"create": <>
                                     <Button 
