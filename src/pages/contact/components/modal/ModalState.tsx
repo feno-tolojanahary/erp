@@ -1,24 +1,30 @@
 import { Dialog, Transition } from '@headlessui/react'
-import React, { Fragment, useState } from 'react'
-import { useEffect } from 'react'
+import React, { Fragment, useRef } from 'react'
+import TableState from "./TableState";
+import { 
+  Button
+} from '@mui/material';
 
 export default function MyModal({
-    isOpen: isOpenModal
+    isOpen,
+    setIsOpenModal
 }: any) {
-  let [isOpen, setIsOpen] = useState(isOpenModal)
+
+  let completeButtonRef = useRef<HTMLButtonElement>(null);
 
   const closeModal = () => {
-    setIsOpen(false)
+    setIsOpenModal(false)
   }
-
-  useEffect(() => {
-    setIsOpen(isOpenModal)
-  }, [isOpenModal])
 
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog 
+          as="div" 
+          className="relative z-10" 
+          onClose={closeModal}
+          initialFocus={completeButtonRef}
+          >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -42,30 +48,34 @@ export default function MyModal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
-                  >
-                    Payment successful
-                  </Dialog.Title>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      Your payment has been successfully submitted. We’ve sent
-                      you an email with all of the details of your order.
-                    </p>
-                  </div>
+                <div className="fixed inset-0 flex items-center justify-center p-4">
+                  <div className="flex min-h-full items-center justify-center">
+                      <Dialog.Panel className="w-full transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                        <Dialog.Title
+                          as="h3"
+                          className="text-lg font-medium leading-6 text-gray-900"
+                        >
+                          Search: State
+                        </Dialog.Title>
+                        <TableState />
 
-                  <div className="mt-4">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
-                    >
-                      Got it, thanks!
-                    </button>
+                        <div className="mt-4 w-48 m-2 flex justify-items-end justify-between">
+                          <Button 
+                             ref={completeButtonRef}
+                              className="flex" 
+                              variant="contained"
+                              >
+                                  Create
+                          </Button>
+                          <Button 
+                              variant="outlined"
+                          >
+                              Cancel
+                          </Button>
+                        </div>
+                      </Dialog.Panel>
                   </div>
-                </Dialog.Panel>
+                </div>
               </Transition.Child>
             </div>
           </div>
