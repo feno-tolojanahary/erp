@@ -1,16 +1,21 @@
 import { Dialog, Transition } from '@headlessui/react'
 import React, { Fragment, useRef } from 'react'
-import TableState from "./TableState";
-import { 
-  Button
-} from '@mui/material';
 
-export default function MyModal({
+type Props = {
+    isOpen: boolean,
+    setIsOpenModal: (isOpen: boolean) => void,
+    title: string,
+    children?: React.ReactNode;
+}
+
+export default function Modal({
     isOpen,
-    setIsOpenModal
-}: any) {
+    setIsOpenModal,
+    title,
+    children
+}: Props) {
 
-  let completeButtonRef = useRef<HTMLButtonElement>(null);
+  let divRef = useRef<HTMLDivElement>(null);
 
   const closeModal = () => {
     setIsOpenModal(false)
@@ -23,7 +28,7 @@ export default function MyModal({
           as="div" 
           className="relative z-10" 
           onClose={closeModal}
-          initialFocus={completeButtonRef}
+          initialFocus={divRef}
           >
           <Transition.Child
             as={Fragment}
@@ -48,31 +53,18 @@ export default function MyModal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <div className="fixed inset-0 flex items-center justify-center p-4">
+                <div className="fixed inset-0 flex items-center justify-center p-4" ref={divRef}>
                   <div className="flex min-h-full items-center justify-center">
                       <Dialog.Panel className="w-full transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                         <Dialog.Title
                           as="h3"
                           className="text-lg font-medium leading-6 text-gray-900"
                         >
-                          Search: State
+                          {title}
                         </Dialog.Title>
-                        <TableState />
-
-                        <div className="mt-4 w-48 m-2 flex justify-items-end justify-between">
-                          <Button 
-                             ref={completeButtonRef}
-                              className="flex" 
-                              variant="contained"
-                              >
-                                  Create
-                          </Button>
-                          <Button 
-                              variant="outlined"
-                          >
-                              Cancel
-                          </Button>
-                        </div>
+                        <>
+                            {children}
+                        </>
                       </Dialog.Panel>
                   </div>
                 </div>

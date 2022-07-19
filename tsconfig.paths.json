@@ -6,7 +6,8 @@
             "@services/*": [ "services/*" ],
             "@context/*": [ "context/*" ],
             "@components/*": [ "components/*" ],
-            "@pages/*": ["pages/*"]
+            "@pages/*": ["pages/*"],
+            "@helpers/*": ["helpers/*"]
         }
     }
 }
