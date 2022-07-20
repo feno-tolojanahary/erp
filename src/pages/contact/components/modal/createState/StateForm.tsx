@@ -6,8 +6,17 @@ import {
     Box
 } from '@mui/material';
 import { stopPropagate } from '@helpers/general';
-import SelectSimple from "@components/SelectSimple";
+import ListboxSimple from '@components/ListboxSimple';
 import ModalCountries from '../countries/ModalCountries';
+
+const peoples = [
+    { id: 1, name: 'Wade Cooper' },
+    { id: 2, name: 'Arlene Mccoy' },
+    { id: 3, name: 'Devon Webb' },
+    { id: 4, name: 'Tom Cook' },
+    { id: 5, name: 'Tanya Fox' },
+    { id: 6, name: 'Hellen Schmidt' },
+]
 
 const StateForm = ({
     setIsOpenModal
@@ -16,6 +25,14 @@ const StateForm = ({
 
     const onSubmit = (data: any) => {
         console.log("The form is submited: ", data)
+    }
+
+    const selectedCountry = (selected: any) => {
+        console.log("the selected country: ", selected)
+    }
+
+    const onChangeCountry = (value: string | string[]) => {
+        console.log("onChangeCountry: ", value)
     }
 
     return (
@@ -60,12 +77,15 @@ const StateForm = ({
                         name="country"
                         control={control}
                         render={({ field }) => 
-                                <SelectSimple 
-                                    optionList={[]}
-                                    hasSearchMore
-                                    modalSearch={ModalCountries}
+                                
+                            <div className="MuiFormControl-root MuiTextField-root w-full css-1u3bzj6-MuiFormControl-root-MuiTextField-root">    
+                                <ListboxSimple
+                                    items={peoples}
+                                    name='countries'
+                                    onSelectedItem={selectedCountry}
+                                    onChange={onChangeCountry}
                                 />
-                
+                            </div>
                         }
                     />
                 </Box>
