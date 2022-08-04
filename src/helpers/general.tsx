@@ -5,3 +5,12 @@ export function stopPropagate(callback: () => void) {
       callback()
     }
 }
+
+export function mapForListboxSimple(array: any[], nameAttr = "name") {
+  return array.map(item => {
+    return {
+      id: item["id"],
+      name: item[nameAttr]
+    }
+  })
+}

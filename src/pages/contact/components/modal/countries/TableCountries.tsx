@@ -1,6 +1,4 @@
-
-
-import * as React from 'react';
+import React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -8,53 +6,18 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { Country } from "@interfaces/general";
 
-function createData(
-  name: string,
-  code: string,
-) {
-  return { name, code };
+type Props = {
+  countries: Country[],
+  onSelected: (selected: Country) => void
 }
 
-const rows = [
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-  createData('country name', "CODE"),
-];
+export default function TableCountries({
+  countries,
+  onSelected
+}: Props) {
 
-export default function TableCountries() {
   return (
     <TableContainer component={Paper} className="max-h-[53rem] overflow-scroll ">
       <Table sx={{ minWidth: 700 }} aria-label="simple table">
@@ -65,10 +28,12 @@ export default function TableCountries() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {countries.map((row: Country) => (
             <TableRow
-              key={row.name}
+              key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              className="hover:bg-[#eeeeee] hover:cursor-pointer"
+              onClick={() => onSelected(row)}
             >
               <TableCell component="th" scope="row">
                 {row.name}

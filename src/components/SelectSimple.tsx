@@ -29,6 +29,10 @@ export default function SelectSimple({
         e.target.click()
     }
 
+    const onSelected = (item: any) => {
+               
+    }
+
     useEffect(() => {
         setValue(givenValue)
     }, [givenValue])
@@ -55,6 +59,7 @@ export default function SelectSimple({
             { ModalSearch && <ModalSearch 
                                         isOpen={isOpenModal} 
                                         setIsOpenModal={setIsOpenModal}
+                                        onSelected={onSelected}
                                         /> }  
         </>                                
     )

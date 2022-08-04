@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { 
     TextField,
     Box,
@@ -22,7 +22,7 @@ type propsType = {
 
 const FormContact : React.FC<propsType> = (props: propsType) => {
     const formButtonRef = useRef<HTMLButtonElement | null>(null);
-    const { control, handleSubmit } = useForm();
+    const { control, handleSubmit, setValue } = useForm();
 
     useEffect(() => {
         props.setNavAction({
@@ -93,7 +93,10 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
                                 </div>
                                 <div className='flex flex-row mt-10'>
                                     <div className="basis-1/2 pr-5">
-                                        <Address/>
+                                        <Address
+                                            control={control}
+                                            setValue={setValue}
+                                        />
                                     </div>
                                     <div className="basis-1/2 pl-5">
                                         <Controller

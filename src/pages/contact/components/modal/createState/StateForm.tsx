@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from "react-hook-form";
 import { 
     TextField,
@@ -8,32 +8,47 @@ import {
 import { stopPropagate } from '@helpers/general';
 import ListboxSimple from '@components/ListboxSimple';
 import ModalCountries from '../countries/ModalCountries';
+import StaticService from "@services/static.service"
+import addressStateService from '@services/address/addressState.service';
+import { Country } from "@interfaces/general";
 
-const peoples = [
-    { id: 1, name: 'Wade Cooper' },
-    { id: 2, name: 'Arlene Mccoy' },
-    { id: 3, name: 'Devon Webb' },
-    { id: 4, name: 'Tom Cook' },
-    { id: 5, name: 'Tanya Fox' },
-    { id: 6, name: 'Hellen Schmidt' },
-]
+type Props = {
+    setIsOpenModal: (isOpen: boolean) => void,
+    refreshStates: () => void
+}
 
 const StateForm = ({
-    setIsOpenModal
-}: any) => {
+    setIsOpenModal,
+    refreshStates
+}: Props) => {
     const { control, handleSubmit } = useForm();
+    const [countries, setCountries] = useState<Country[]>([]);
+    const [selectedCountry, setSelectedCountry] = useState<Country>();
+
+    useEffect(() => {
+        new StaticService().getAll('countries').then((res: any) => {
+            setCountries(res);
+          }).catch(err => console.error("Get countries: ", err))
+    }, [])
+
+    
+    const handleTableSelectedCountry = (selected: Country): void => {
+        setSelectedCountry(selected)
+    }
 
     const onSubmit = (data: any) => {
-        console.log("The form is submited: ", data)
+        addressStateService.create(data)
+            .then(_res => {
+                refreshStates();
+                setIsOpenModal(false);
+            }).catch(err => {
+                console.error("AddressState create: ", err)
+            })
     }
 
-    const selectedCountry = (selected: any) => {
-        console.log("the selected country: ", selected)
-    }
-
-    const onChangeCountry = (value: string | string[]) => {
-        console.log("onChangeCountry: ", value)
-    }
+    // const onChangeCountry = (value: string | string[]) => {
+    //     console.log("onChangeCountry: ", value)
+    // }
 
     return (
         <div className="w-[36rem]">
@@ -77,16 +92,21 @@ const StateForm = ({
                         name="country"
                         control={control}
                         render={({ field }) => 
-                                
-                            <div className="MuiFormControl-root MuiTextField-root w-full css-1u3bzj6-MuiFormControl-root-MuiTextField-root">    
-                                <ListboxSimple
-                                    items={peoples}
-                                    name='countries'
-                                    onSelectedItem={selectedCountry}
-                                    onChange={onChangeCountry}
-                                />
-                            </div>
-                        }
+                                <div className="MuiFormControl-root MuiTextField-root w-full css-1u3bzj6-MuiFormControl-root-MuiTextField-root">    
+                                    <ListboxSimple
+                                        items={countries.slice(0, 6)}
+                                        selectedItem={selectedCountry}
+                                        // onChange={onChangeCountry}
+                                        {...field}
+                                        hasSearchMore
+                                        ModalSearch={ModalCountries}
+                                        modalAdditionalProps={{
+                                            countries,
+                                            onCountrySelected: handleTableSelectedCountry
+                                        }}
+                                    />
+                                </div>
+                            }
                     />
                 </Box>
                 <div className="mt-4 w-48 m-2 flex justify-items-end justify-between">

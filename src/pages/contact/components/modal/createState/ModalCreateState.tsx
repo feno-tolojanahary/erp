@@ -4,11 +4,13 @@ import StateForm from './StateForm';
 
 type Props = {
   isOpen: boolean,
-  setIsOpenModal: (isOpen: boolean) => void
+  setIsOpenModal: (isOpen: boolean) => void,
+  refreshStates: () => void
 }
 export default function Modal({
     isOpen,
-    setIsOpenModal
+    setIsOpenModal,
+    refreshStates
 }: Props) {
 
   return (
@@ -19,6 +21,7 @@ export default function Modal({
     >
       <StateForm 
         setIsOpenModal={setIsOpenModal} 
+        refreshStates={refreshStates}
       />
     </ModalBase>
   )

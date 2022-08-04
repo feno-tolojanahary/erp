@@ -14,13 +14,19 @@ export default class BaseService {
     }
 
     @getData()
-    create() {
-        return http.post(`${this.path}/`);
+    getByCompany(companyId: number) {
+        return http.get(`${this.path}/${companyId}`);
+    }
+
+
+    @getData()
+    create(data: any) {
+        return http.post(`${this.path}/`, data);
     }
 
     @getData()
-    update(id: string) {
-        return http.put(`${this.path}/${id}`);
+    update(data: any) {
+        return http.put(`${this.path}/${data?.id}`, data);
     }
 
     @getData()
