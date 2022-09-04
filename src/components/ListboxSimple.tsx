@@ -18,7 +18,8 @@ type Props = {
     selectedItem?: Item | null,
     onSelectedItem?: (item: Item) => void,
     value?: any,
-    additionalClass?: string
+    additionalClass?: string,
+    attrVal?: "id" | "name";
 }
 
 export default function ListboxSimple({
@@ -31,13 +32,13 @@ export default function ListboxSimple({
     hasSearchMore,
     ModalSearch,
     modalAdditionalProps = {},
-    value,
+    attrVal = "id",
     additionalClass
 }: Props) {
 
   const [selected, setSelected] = useState<Item | null>();
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const [inputVal, setInputVal] = useState<string>('');
+  const [inputVal, setInputVal] = useState<string>();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
 
@@ -45,11 +46,10 @@ export default function ListboxSimple({
     const el = inputRef.current;
      // @ts-ignore: Object is possibly 'undefined'.
     var nativeInputValueSetter = Object?.getOwnPropertyDescriptor(window.HTMLInputElement?.prototype, "value").set;
-    nativeInputValueSetter?.call(el, item?.name);
+    nativeInputValueSetter?.call(el, item?.[attrVal]);
 
     var inputEvent = new Event('input', { bubbles: true});
     el?.dispatchEvent(inputEvent);
-    // onSelectedItem(item)
   }
   
   const handleClickItem = (item: Item) => {
@@ -66,8 +66,8 @@ export default function ListboxSimple({
   }
 
   const handleSelectedItem = (item: any) => {
-     onSelectedItem(item)
-     setIsOpenModal(false);
+    onSelectedItem(item)
+    setIsOpenModal(false);
   }
 
   const handleChangeInput = (e: React.FormEvent<HTMLInputElement>): void => {

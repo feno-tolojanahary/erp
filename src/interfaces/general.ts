@@ -6,6 +6,7 @@ export interface Country {
 }
 
 export type State = {
+    id: number,
     stateName: string,
     stateCode: number,
     country: string

@@ -4,8 +4,7 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem,
-    SelectChangeEvent,
+    MenuItem
 } from '@mui/material';
 
 export default function SelectSimple({
@@ -13,6 +12,8 @@ export default function SelectSimple({
     label,
     defaultValue,
     value: givenValue,
+    name,
+    onChange,
     hasSearchMore,
     modalSearch: ModalSearch
 }: any) {
@@ -26,7 +27,8 @@ export default function SelectSimple({
     }
 
     const handleChangeSelect = (e: any) => {
-        e.target.click()
+        // e.target.click()
+        if (typeof onChange === 'function') onChange(e);
     }
 
     const onSelected = (item: any) => {
@@ -46,13 +48,13 @@ export default function SelectSimple({
                     label={label}
                     value={value || ''}
                     onChange={handleChangeSelect}
+                    name={name}
                 >
                     {
                         optionList.map((item: any) => 
                             <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>    
                         )
                     } 
-                    <MenuItem key={0} value={''}>Default</MenuItem>
                     { hasSearchMore && <button onClick={searchMore}>Search more...</button> }    
                 </Select>
             </FormControl>

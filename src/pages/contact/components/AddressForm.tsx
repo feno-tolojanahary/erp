@@ -22,12 +22,15 @@ const AddressForm = ({
 }: Props) => {
 
     const [states, setStates] = useState<State[]>([]);
+    const [stateOptionList, setStateOptionList] = useState<Item[]>([]);
     const [selectedStateItem, setSelectedStateItem] = useState<Item>();
 
     const getStates = () => {
         addressStateService.getByCompany(1)
         .then((res: any) => {
-            setStates(res || [])
+            const _states = res || [];
+            setStates(_states);
+            setStateOptionList(mapForListboxSimple(_states.slice(0, 6), "stateName"));
         }).catch(err => {
             console.log("AddressState getByCompany: ", err)
         })
@@ -41,7 +44,8 @@ const AddressForm = ({
     }
 
     const handleChangeState = (e: React.FormEvent<HTMLInputElement>) => {
-        setValue('address.country', e.currentTarget.value || "");
+        const _state = states?.find(state => state.id === parseInt(e.currentTarget.value));
+        setValue('address.country', _state?.country);
     }
 
     useEffect(() => {
@@ -53,8 +57,19 @@ const AddressForm = ({
             className='w-full flex flex-row justify-between'
         >
             <div className="basis-1/3 pr-2">
-                <SelectWithService 
-                    path="addressTypes"
+                <Controller
+                    name="address.typeId"
+                    control={control}
+                    render={({ field: { name, onChange, value } }) => 
+                        <SelectWithService 
+                            path="addressTypes"
+                            label="Address type"
+                            defaultValue=''
+                            name={name}
+                            onChange={onChange}
+                            value={value}
+                        />
+                    }
                 />
             </div>
             <div className="basis-2/3">
@@ -101,18 +116,22 @@ const AddressForm = ({
                         }
                     />
                     <Controller
-                        name="address.state"
+                        name="address.stateId"
                         control={control}
-                        render={({ field }) => 
+                        render={({ field: { value, name, onChange } }) => 
                             <div className='m-[4px]'>
                                 <ListboxSimple
-                                    items={mapForListboxSimple(states.slice(0, 6), "stateName")}
+                                    items={stateOptionList}
                                     additionalClass="min-w-[145px]"
-                                    {...field}
+                                    value={value}
+                                    name={name}
                                     onSelectedItem={handleSelectedState}
                                     hasSearchMore
                                     selectedItem={selectedStateItem}
-                                    onChange={handleChangeState}
+                                    onChange={(e) => {
+                                        handleChangeState(e)
+                                        onChange(e)
+                                    }}
                                     ModalSearch={ModalState}
                                     modalAdditionalProps={{
                                         states,

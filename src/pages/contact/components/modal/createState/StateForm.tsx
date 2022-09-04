@@ -10,7 +10,7 @@ import ListboxSimple from '@components/ListboxSimple';
 import ModalCountries from '../countries/ModalCountries';
 import StaticService from "@services/static.service"
 import addressStateService from '@services/address/addressState.service';
-import { Country } from "@interfaces/general";
+import { Country, Item } from "@interfaces/general";
 
 type Props = {
     setIsOpenModal: (isOpen: boolean) => void,
@@ -23,7 +23,7 @@ const StateForm = ({
 }: Props) => {
     const { control, handleSubmit } = useForm();
     const [countries, setCountries] = useState<Country[]>([]);
-    const [selectedCountry, setSelectedCountry] = useState<Country>();
+    const [selectedCountry, setSelectedCountry] = useState<Item>();
 
     useEffect(() => {
         new StaticService().getAll('countries').then((res: any) => {
@@ -32,7 +32,7 @@ const StateForm = ({
     }, [])
 
     
-    const handleTableSelectedCountry = (selected: Country): void => {
+    const handleTableSelectedCountry = (selected: Item): void => {
         setSelectedCountry(selected)
     }
 
@@ -97,13 +97,14 @@ const StateForm = ({
                                         items={countries.slice(0, 6)}
                                         selectedItem={selectedCountry}
                                         // onChange={onChangeCountry}
+                                        onSelectedItem={handleTableSelectedCountry}
                                         {...field}
                                         hasSearchMore
                                         ModalSearch={ModalCountries}
                                         modalAdditionalProps={{
-                                            countries,
-                                            onCountrySelected: handleTableSelectedCountry
+                                            countries
                                         }}
+                                        attrVal="name"
                                     />
                                 </div>
                             }

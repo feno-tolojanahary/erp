@@ -1,6 +1,6 @@
 import BaseService from "./base.service";
 
-export default class CompanyService extends BaseService {
+class CompanyService extends BaseService {
     
     constructor()
     {
@@ -8,3 +8,5 @@ export default class CompanyService extends BaseService {
     }
 
 }
+
+export default new CompanyService();
