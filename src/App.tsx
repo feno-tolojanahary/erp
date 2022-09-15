@@ -32,6 +32,7 @@ const App = () => {
           <Route path="/" element={<Contacts/>} />
           <Route path="contact" element={<Contacts/>} />
           <Route path="contact/create" element={<FormContact/>} />
+          <Route path="contact/edit/:id" element={<FormContact/>} />
         </Routes>
       </ActionsContext.Provider>
     </BrowserRouter>

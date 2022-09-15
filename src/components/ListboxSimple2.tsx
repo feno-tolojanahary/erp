@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+import { FieldValues, UseFormSetValue } from 'react-hook-form'
 
 
 type Item = {
@@ -15,19 +16,17 @@ type Props = {
     hasSearchMore?: boolean,
     ModalSearch?: React.ElementType,
     modalAdditionalProps?: Object,
-    selectedItem?: Item | null,
-    onSelectedItem?: (item: Item) => void,
     value: any,
     additionalClass?: string,
-    attrVal?: "id" | "name";
+    setValue: UseFormSetValue<FieldValues>,
+    attrVal?: "id" | "name",
 }
 
 export default function ListboxSimple({
     items,
     name,
-    onSelectedItem = (_item: Item) => {},
-    selectedItem = null,
     onChange,
+    setValue,
     value,
     hasSearchMore,
     ModalSearch,
@@ -38,55 +37,32 @@ export default function ListboxSimple({
 
   const [selected, setSelected] = useState<Item | null>();
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const [inputVal, setInputVal] = useState<string>();
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
-
-  const changeInputValue = (item: Item) => {
-    const el = inputRef.current;
-     // @ts-ignore: Object is possibly 'undefined'.
-    var nativeInputValueSetter = Object?.getOwnPropertyDescriptor(window.HTMLInputElement?.prototype, "value").set;
-    nativeInputValueSetter?.call(el, item?.[attrVal]);
-
-    var inputEvent = new Event('input', { bubbles: true});
-    el?.dispatchEvent(inputEvent);
-  }
   
   const handleClickItem = (item: Item) => {
-    changeInputValue(item);
+    setValue(name, item[attrVal]);
   }
 
   useEffect(() => {
-    setSelected(selectedItem)
-    changeInputValue(selectedItem as Item)
-  }, [selectedItem])
+    if (value) {
+      const selected = items.find(item => item[attrVal] === value);
+      if (selected) setSelected(selected);
+    }
+  }, [value, attrVal, items]);
 
   const openModalSearchMore = (): void => {
     setIsOpenModal(true);
   }
 
   const handleSelectedItem = (item: any) => {
-    onSelectedItem(item)
+    setValue(name, item[attrVal]);
     setIsOpenModal(false);
-  }
-
-  const handleChangeInput = (e: React.FormEvent<HTMLInputElement>): void => {
-    let _value = e.currentTarget.value;
-    if(typeof onChange === 'function') onChange(e);
-    setInputVal(_value);
   }
 
   return (
       <>
         <Listbox value={selected} onChange={setSelected}>
           <div className={`w-full relative mt-1 ${additionalClass}`}>
-          <input 
-              name={name}
-              value={inputVal}
-              ref={inputRef}
-              onChange={handleChangeInput}
-              style={{display: "none"}}
-              />
             <Listbox.Button className="relative w-full cursor-default bg-white text-left border-[1px] rounded-[4px] focus:outline-none border-[#c4c4c4] focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 text-md pt-[15px] pb-[16px] px-[15px]">
               { selected?.name ? <span className="block truncate">{selected.name}</span> 
                               : <span className="block truncate text-gray-500">Select a value...</span> }

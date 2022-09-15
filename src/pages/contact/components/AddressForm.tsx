@@ -7,18 +7,20 @@ import SelectWithService from '@components/SelectWithService';
 import addressStateService from '@services/address/addressState.service';
 import { State, Item } from "@interfaces/general";
 import ModalState from './modal/stateList/ModalState';
-import ListboxSimple from '@components/ListboxSimple';
+import ListboxSimple from '@components/ListboxSimple2';
 import { Control, FieldValues } from 'react-hook-form';
 import { mapForListboxSimple } from "@helpers/general";
 
 type Props = {
     control: Control<FieldValues, object>,
-    setValue: UseFormSetValue<FieldValues>
+    setValue: UseFormSetValue<FieldValues>,
+    address: any
 }
 
 const AddressForm = ({
     control,
-    setValue
+    setValue,
+    address
 }: Props) => {
 
     const [states, setStates] = useState<State[]>([]);
@@ -60,6 +62,7 @@ const AddressForm = ({
                 <Controller
                     name="address.typeId"
                     control={control}
+                    defaultValue=""
                     render={({ field: { name, onChange, value } }) => 
                         <SelectWithService 
                             path="addressTypes"
@@ -76,6 +79,7 @@ const AddressForm = ({
                 <Controller
                     name="address.street"
                     control={control}
+                    defaultValue=""
                     render={({ field }) => 
                                 <TextField
                                 id="outlined-required"
@@ -89,6 +93,7 @@ const AddressForm = ({
                 <Controller
                     name="address.street2"
                     control={control}
+                    defaultValue=""
                     render={({ field }) => 
                                 <TextField
                                 id="outlined-required"
@@ -105,12 +110,13 @@ const AddressForm = ({
                     <Controller
                         name="address.city"
                         control={control}
+                        defaultValue=""
                         render={({ field }) => 
                                     <TextField
                                     id="outlined-required"
                                     className='w-full'
                                     label="City"
-                                    {...field}
+                                    {...field}  
                                 />
                 
                         }
@@ -118,6 +124,7 @@ const AddressForm = ({
                     <Controller
                         name="address.stateId"
                         control={control}
+                        defaultValue=""
                         render={({ field: { value, name, onChange } }) => 
                             <div className='m-[4px]'>
                                 <ListboxSimple
@@ -125,9 +132,7 @@ const AddressForm = ({
                                     additionalClass="min-w-[145px]"
                                     value={value}
                                     name={name}
-                                    onSelectedItem={handleSelectedState}
                                     hasSearchMore
-                                    selectedItem={selectedStateItem}
                                     onChange={(e) => {
                                         handleChangeState(e)
                                         onChange(e)
@@ -137,6 +142,7 @@ const AddressForm = ({
                                         states,
                                         getStates
                                     }}
+                                    setValue={setValue}
                                 />
                             </div>
                         }
@@ -144,6 +150,7 @@ const AddressForm = ({
                     <Controller
                         name="address.zip"
                         control={control}
+                        defaultValue=""
                         render={({ field }) => 
                                     <TextField
                                     id="outlined-required"
@@ -158,6 +165,7 @@ const AddressForm = ({
                 <Controller
                     name="address.country"
                     control={control}
+                    defaultValue=""
                     render={({ field: { name, value, onChange, onBlur } }) => 
                                 <TextField
                                     id="outlined-required"
