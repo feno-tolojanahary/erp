@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { NavAction } from '@context/actions';
 import CardContact from './components/CardContact';
 import contactService, { Contact } from '@services/contact.service';
+import companyService, { Company } from '@services/company.service';
 
 
 type propsType = {
@@ -15,7 +16,7 @@ export default function Contacts(props: propsType) {
     useEffect(() => {
         props.setNavAction({
             button: "listing",
-            page: 'contact',
+            page: 'contactListing',
         })
 
         contactService.getAll()
@@ -28,17 +29,23 @@ export default function Contacts(props: propsType) {
 
     
 
+    
+
     return (
-        <div>
-            <h1>List of contact</h1>
+        <div className="p-10">
             <div className="grid grid-cols-5 gap-4">
                 { contacts.map(contact => 
                     <CardContact
                         contact={contact}
                     />
                 )}
-                    
             </div>
+            {
+                contacts.length === 0 && 
+                <div className="text-center w-full text-slate-600" >
+                    <span>List is empty</span>
+                </div>
+            }  
         </div>
     )
 }

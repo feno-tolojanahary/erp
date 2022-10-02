@@ -27,9 +27,14 @@ export interface Contact {
     website: string | null;
     companyId: number | null;
     addressId?: number | null;
+    tagId?: number | null;
+    titleId?: number | null;
     createdBy: number;
     address?: Address,
     Company?: Company,
+
+    title?: any,
+    tag?: any,
     
     createdAt?: Date;
     updatedAt?: Date;

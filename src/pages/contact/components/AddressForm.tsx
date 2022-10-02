@@ -10,22 +10,26 @@ import ModalState from './modal/stateList/ModalState';
 import ListboxSimple from '@components/ListboxSimple2';
 import { Control, FieldValues } from 'react-hook-form';
 import { mapForListboxSimple } from "@helpers/general";
+import { getValue } from '@testing-library/user-event/dist/utils';
 
 type Props = {
     control: Control<FieldValues, object>,
     setValue: UseFormSetValue<FieldValues>,
+    watch: UseFormSetValue<FieldValues>,
     address: any
 }
 
 const AddressForm = ({
     control,
     setValue,
+    watch,
     address
 }: Props) => {
 
     const [states, setStates] = useState<State[]>([]);
     const [stateOptionList, setStateOptionList] = useState<Item[]>([]);
     const [selectedStateItem, setSelectedStateItem] = useState<Item>();
+    const watchStateChange = watch("address.stateId", 0);
 
     const getStates = () => {
         addressStateService.getByCompany(1)
@@ -38,17 +42,11 @@ const AddressForm = ({
         })
     }
 
-    const handleSelectedState = (selectedState: any) => {
-        setSelectedStateItem({
-            id: selectedState?.id,
-            name: selectedState?.stateName
-        });
-    }
-
-    const handleChangeState = (e: React.FormEvent<HTMLInputElement>) => {
-        const _state = states?.find(state => state.id === parseInt(e.currentTarget.value));
-        setValue('address.country', _state?.country);
-    }
+    useEffect(() => {
+        const selectedState = states?.find(state => state.id === ((watchStateChange as unknown) as number));
+        if (selectedState) setValue('address.country', selectedState?.country);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [watchStateChange])
 
     useEffect(() => {
         getStates();
@@ -56,7 +54,7 @@ const AddressForm = ({
 
     return (
         <div
-            className='w-full flex flex-row justify-between'
+            className='w-full flex flex-row justify-bet ween'
         >
             <div className="basis-1/3 pr-2">
                 <Controller
@@ -133,10 +131,6 @@ const AddressForm = ({
                                     value={value}
                                     name={name}
                                     hasSearchMore
-                                    onChange={(e) => {
-                                        handleChangeState(e)
-                                        onChange(e)
-                                    }}
                                     ModalSearch={ModalState}
                                     modalAdditionalProps={{
                                         states,

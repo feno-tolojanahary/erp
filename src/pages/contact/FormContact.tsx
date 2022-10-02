@@ -13,40 +13,39 @@ import {
 } from '@mui/material';
 import { useForm, Controller } from "react-hook-form";
 import Address from "./components/AddressForm";
-import { ActionsContext, NavAction } from '../../context/actions';
+import { NavAction } from '../../context/actions';
 import SelectWithService from '@components/SelectWithService';
 import SelectSimple from '@components/SelectSimple';
 import contactService, { Contact } from '@services/contact.service';
 import companyService, { Company } from '@services/company.service';
 import { useNotification } from "@hooks/notification";
-import { useParams } from 'react-router-dom';
 
 const TYPE_CONTACT = 'contacts';
 const TYPE_COMPANY = 'companies';
 
 type propsType = {
-    setNavAction: Dispatch<SetStateAction<NavAction>>
+    setNavAction: Dispatch<SetStateAction<NavAction>>,
+    contact: Contact,
+    company: Company,
+    address: any
 }
 
 const FormContact : React.FC<propsType> = (props: propsType) => {
+    const { contact, company, address } = props;
     const formButtonRef = useRef<HTMLButtonElement | null>(null);
-    const { control, handleSubmit, setValue, reset } = useForm();
+    const { control, handleSubmit, setValue, reset, watch } = useForm();
     const [formType, setFormType] = useState<string>(TYPE_CONTACT);
     const [companies, setCompanies] = useState([]);
-    const [contact, setContact] = useState<Contact>();
-    const [company, setCompany] = useState<Company>();
-    const [address, setAddress] = useState();
     const { showSuccess, showError } = useNotification();
-    const { id } = useParams();
 
     useEffect(() => {
         props.setNavAction({
-            button: "create",
-            page: 'contact',
-            prevUrl: '/contact',
+            button: contact?.id ? "update" : "create",
+            page: 'contactCreateUpdate',
+            prevUrl: '/contact-list',
             formButtonRef: formButtonRef
         })
-    }, [formButtonRef])                                
+    }, [formButtonRef, contact?.id])                                
 
     useEffect(() => {
         companyService.getAll().then((res: any) => {
@@ -57,7 +56,7 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
     useEffect(() => {
         if (contact) {
             if (formType === TYPE_CONTACT) {
-                const { name, Company, address, jobPosition, phone, mobile, email, website } = contact;
+                const { name, Company, address, jobPosition, phone, mobile, email, website, tagId, titleId } = contact;
                 setValue("name", name);
                 setValue("companyId", Company?.id);
                 if (address) {
@@ -68,6 +67,8 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
                 setValue("mobile", mobile);
                 setValue("email", email);
                 setValue("website", website);
+                setValue("tagId", tagId);
+                setValue("titleId", titleId);
             } else if (formType === TYPE_COMPANY && contact?.Company) {
                 const { name, address, phone, mobile, email, website } = contact.Company;
                 setValue("name", name);
@@ -81,30 +82,35 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
             }
         }
     }, [contact, formType, setValue])
-
-    useEffect(() => {
-        if (id) {
-            contactService.getById(id)
-                .then((res: any) => {
-                    if (res) {
-                        setContact(res);
-                        setCompany(res.Company);
-                        setAddress(res.address);
-                    }
-                })
-        }
-    }, [id]);
     
     const onSubmit = (data: any) => {
         const service = formType === TYPE_CONTACT ? contactService : companyService;
         data.address.targetType = formType;
-        service.create(data)
-            .then(res => {
-                console.log("service created: ", res);
-                showSuccess(`${formType === TYPE_CONTACT ? "Contact" : "Company"} created with success!`);
-                reset();
+        let action: ((data: any) => Promise<any>) | ((data: any) => Promise<any>) = (data: any) => Promise.resolve(null);
+        let dataToSave: any = {}
+        if (!contact) {
+            action = service.create;
+            dataToSave = data;
+        } else {
+            action = service.update;
+            const oldContact = {
+                ...contact,
+                Company: company,
+                address: address
+            }
+            dataToSave = {...oldContact, ...data};
+        }
+
+        action.call(service, dataToSave)
+            .then((res: any) => {
+                if (!contact) {
+                    showSuccess(`${formType === TYPE_CONTACT ? "Contact" : "Company"} created with success!`);
+                    reset();
+                } else {
+                    showSuccess(`${formType === TYPE_CONTACT ? "Contact" : "Company"} updated with success!`);
+                }
             })
-            .catch(err => {
+            .catch((err: Error) => {
                 console.log(err)
                 showError("Something went wrong");
             })
@@ -177,6 +183,7 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
                                             control={control}
                                             setValue={setValue}
                                             address={address}
+                                            watch={watch}
                                         /> 
                                     </div>
                                     <div className="basis-1/2 pl-5">
@@ -254,13 +261,13 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
                                         />
                                         { formType === TYPE_CONTACT &&
                                             <Controller
-                                                name="userTitles"
+                                                name="titleId"
                                                 control={control}
                                                 defaultValue=""
                                                 render={({ field: { name, onChange, value } }) => 
                                                     <SelectWithService 
                                                         path="userTitles"
-                                                        label="Title"
+                                                         label="Title"
                                                         name={name}
                                                         onChange={onChange}
                                                         value={value}
@@ -269,7 +276,7 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
                                             />
                                         }
                                         <Controller
-                                            name="tags"
+                                            name="tagId"
                                             control={control}
                                             // defaultValue={(isContact ? contact?.tag : contact?.Company?.tag) ?? ""}
                                             defaultValue=""
@@ -294,12 +301,4 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
     )
 }
 
-export default function ContainerFormContact() {
-    return (
-        <ActionsContext.Consumer>
-            {({setNavAction}) => 
-                <FormContact setNavAction={setNavAction} />
-            }
-        </ActionsContext.Consumer>
-    )
-};
+export default FormContact;

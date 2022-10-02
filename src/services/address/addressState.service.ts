@@ -16,7 +16,9 @@ export interface Address {
     stateId: number,
     country: string,
     targetId: number,
-    targetType: string
+    targetType: string,
+    type?: any,
+    state?: any
 }
 
 export default new AddressStateService();

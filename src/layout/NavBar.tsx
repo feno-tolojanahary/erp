@@ -20,7 +20,8 @@ const NavBar = (props: propsType) => {
         <>
             <div className='w-48 m-2 flex justify-items-end justify-between'>
                 { 
-                    {"create": <>
+                    {"contactCreateUpdate": 
+                                <>
                                     <Button 
                                         className="flex" 
                                         variant="contained"
@@ -32,10 +33,11 @@ const NavBar = (props: propsType) => {
                                         variant="outlined"
                                         onClick={() => navigate(props.navAction?.prevUrl as To)}
                                     >
-                                        Discard
+                                        { props.navAction?.button === "update" ? "Discard" : "Return" }
                                     </Button>
                                 </>,
-                    "listing": <>  
+                    "contactListing": 
+                            <>  
                                 <Button 
                                     className="flex" 
                                     variant="contained"
@@ -44,8 +46,24 @@ const NavBar = (props: propsType) => {
                                         Create
                                 </Button>
                             </>,
+                    "contactViewDetail":
+                            <>
+                                <Button 
+                                    className="flex" 
+                                    variant="contained"
+                                    onClick={() => navigate(props.navAction?.nextUrl as To)} 
+                                    >
+                                        Edit
+                                </Button>
+                                <Button 
+                                    variant="outlined"
+                                    onClick={() => navigate(props.navAction?.prevUrl as To)}
+                                >
+                                    Return
+                                </Button>
+                            </>,
                     "": <></>
-                    }[props.navAction?.button || ""]
+                    }[props.navAction?.page || ""]
                 }
             </div>
         </>
