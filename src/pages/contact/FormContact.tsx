@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { useForm, Controller } from "react-hook-form";
 import Address from "./components/AddressForm";
+import UploadPhoto from "./components/UploadPhoto";
 import { NavAction } from '../../context/actions';
 import SelectWithService from '@components/SelectWithService';
 import SelectSimple from '@components/SelectSimple';
@@ -33,7 +34,7 @@ type propsType = {
 const FormContact : React.FC<propsType> = (props: propsType) => {
     const { contact, company, address } = props;
     const formButtonRef = useRef<HTMLButtonElement | null>(null);
-    const { control, handleSubmit, setValue, reset, watch } = useForm();
+    const { control, handleSubmit, setValue, reset, watch, register } = useForm();
     const [formType, setFormType] = useState<string>(TYPE_CONTACT);
     const [companies, setCompanies] = useState([]);
     const { showSuccess, showError } = useNotification();
@@ -56,29 +57,10 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
     useEffect(() => {
         if (contact) {
             if (formType === TYPE_CONTACT) {
-                const { name, Company, address, jobPosition, phone, mobile, email, website, tagId, titleId } = contact;
-                setValue("name", name);
-                setValue("companyId", Company?.id);
-                if (address) {
-                    setValue("address", address);
-                }
-                setValue("jobPosition", jobPosition);
-                setValue("phone", phone);
-                setValue("mobile", mobile);
-                setValue("email", email);
-                setValue("website", website);
-                setValue("tagId", tagId);
-                setValue("titleId", titleId);
+                reset(contact);
+                setValue("companyId", contact.Company?.id);
             } else if (formType === TYPE_COMPANY && contact?.Company) {
-                const { name, address, phone, mobile, email, website } = contact.Company;
-                setValue("name", name);
-                if (address) {
-                    setValue("address", address);
-                }
-                setValue("phone", phone);
-                setValue("mobile", mobile);
-                setValue("email", email);
-                setValue("website", website);
+                reset(contact.Company);
             }
         }
     }, [contact, formType, setValue])
@@ -101,7 +83,17 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
             dataToSave = {...oldContact, ...data};
         }
 
-        action.call(service, dataToSave)
+        const formData = new FormData();
+
+        for (const attr in dataToSave) {
+            if (attr !== 'file') {   
+                formData.append(`${attr}`, dataToSave[attr]);
+            }
+        }
+
+        formData.append('file', dataToSave.file?.[0]);
+
+        action.call(service, formData)
             .then((res: any) => {
                 if (!contact) {
                     showSuccess(`${formType === TYPE_CONTACT ? "Contact" : "Company"} created with success!`);
@@ -125,17 +117,24 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
             
             <div className="w-full">
                 <div className="container mx-auto ">
-                    <div className="flex">
-                        <FormControl>
-                            <RadioGroup
-                                row
-                                value={formType}
-                                onChange={handleTypeChange}
-                            >
-                                <FormControlLabel value={TYPE_CONTACT} control={<Radio/>} label="Individual"/>
-                                <FormControlLabel value={TYPE_COMPANY} control={<Radio/>} label="Company"/>
-                            </RadioGroup>
-                        </FormControl>
+                    <div className="flex justify-between w-full">
+                        <div className='w-80' >
+                            <FormControl>
+                                <RadioGroup
+                                    row
+                                    value={formType}
+                                    onChange={handleTypeChange}
+                                >
+                                    <FormControlLabel value={TYPE_CONTACT} control={<Radio/>} label="Individual"/>
+                                    <FormControlLabel value={TYPE_COMPANY} control={<Radio/>} label="Company"/>
+                                </RadioGroup>
+                            </FormControl> 
+                        </div>
+                        <div className='w-64'>
+                            <UploadPhoto 
+                                control={control}
+                            />
+                        </div>
                     </div>
                     <form
                         onSubmit={handleSubmit(onSubmit)}

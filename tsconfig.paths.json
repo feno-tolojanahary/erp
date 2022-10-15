@@ -9,7 +9,8 @@
             "@pages/*": ["pages/*"],
             "@helpers/*": ["helpers/*"],
             "@interfaces/*": ["interfaces/*"],
-            "@hooks/*": ["hooks/*"]
+            "@hooks/*": ["hooks/*"],
+            "@assets/*": ["assets/*"]
         }
     }
 }

@@ -18,12 +18,12 @@ export default function BasicCard({
   const navigate = useNavigate();
   const { street, city, zip, country } = contact.address || {};
   
-  const goToEdit = () => {
-    navigate(`/contact/edit/${contact.id}`)
+  const goToDetails = () => {
+    navigate(`/contact/details/${contact.id}`)
   }
 
   return (
-    <Card sx={{ minWidth: 275 }} className="cursor-pointer" onClick={goToEdit}>
+    <Card sx={{ minWidth: 275 }} className="cursor-pointer" onClick={goToDetails}>
       <CardContent>
         {/* <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           

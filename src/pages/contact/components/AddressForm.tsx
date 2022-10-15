@@ -10,7 +10,6 @@ import ModalState from './modal/stateList/ModalState';
 import ListboxSimple from '@components/ListboxSimple2';
 import { Control, FieldValues } from 'react-hook-form';
 import { mapForListboxSimple } from "@helpers/general";
-import { getValue } from '@testing-library/user-event/dist/utils';
 
 type Props = {
     control: Control<FieldValues, object>,
@@ -22,13 +21,11 @@ type Props = {
 const AddressForm = ({
     control,
     setValue,
-    watch,
-    address
+    watch
 }: Props) => {
 
     const [states, setStates] = useState<State[]>([]);
     const [stateOptionList, setStateOptionList] = useState<Item[]>([]);
-    const [selectedStateItem, setSelectedStateItem] = useState<Item>();
     const watchStateChange = watch("address.stateId", 0);
 
     const getStates = () => {

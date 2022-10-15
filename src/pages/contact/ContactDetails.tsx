@@ -92,7 +92,7 @@ const ContactDetails : React.FC<propsType> = (props: propsType) => {
                                 
                         </div>
                     </div>
-                    <div className='flex flex-col w-1/2 px-4'>
+                    <div className='flex flex-col w-1/2 px-4 mt-10'>
                         <TextCard
                             label="Job position"
                             value={jobPosition}
@@ -115,11 +115,11 @@ const ContactDetails : React.FC<propsType> = (props: propsType) => {
                         />
                         <TextCard
                             label="Title"
-                            value={title}
+                            value={title?.name}
                         />
                         <TextCard
                             label="Tag"
-                            value={tag}
+                            value={tag?.name}
                         />
                     </div>
                 </div>

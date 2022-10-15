@@ -5,6 +5,7 @@ export interface NavAction {
     button: string,
     page: string,
     prevUrl?: To | undefined | null,
+    nextUrl?: To | undefined | null,
     formButtonRef?: React.MutableRefObject<HTMLButtonElement | null>
 }
 
