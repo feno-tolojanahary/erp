@@ -1,22 +1,43 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import photoUpload from "@assets/images/photo.png";
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import { Control, Controller, FieldValues } from "react-hook-form";
+import { Control, Controller, FieldValues, UseFormReset, UseFormGetValues } from "react-hook-form";
 
 type propsType = {
-    control: Control<FieldValues, object>
+    control: Control<FieldValues, object>,
+    reset: UseFormReset<FieldValues>,
+    getValues: UseFormGetValues<FieldValues>
 }
 
 const UploadPhoto = (props: propsType) => {
     const {
-        control
+        control,
+        reset,
+        getValues
     } = props;
 
     let inputFileRef = useRef<HTMLInputElement>(null); 
+    const [imageUrl, setImageUrl] = useState<string>(photoUpload);
 
     const triggerChoose = () => {
         inputFileRef.current?.click();
+    }
+
+    const handleUploadedFile = (e: React.FormEvent<HTMLInputElement>) => {
+        const reader = new FileReader();
+        const file: Blob = e.currentTarget?.files?.[0] as Blob;
+        reader.readAsDataURL(file);
+        reader.onloadend = (_) => {
+            setImageUrl(reader.result as string);
+        }
+    }
+
+    const removeSelected = (_e: any) => {
+        setImageUrl(photoUpload);
+        reset({
+            file: null
+        });
     }
 
     return (
@@ -25,14 +46,14 @@ const UploadPhoto = (props: propsType) => {
                 name="file"
                 control={control}
                 defaultValue=""
-                render={({ field: { name, value, onChange, onBlur } }) => 
+                render={({ field: { name, value, onBlur } }) => 
                     <>
                         <div className='w-64 h-8 absolute bg-sky-600/75 none justify-between items-center hover:flex'>
                             <EditRoundedIcon onClick={triggerChoose} fontSize="small" />
-                            <DeleteForeverRoundedIcon fontSize="small" />
+                            <DeleteForeverRoundedIcon fontSize="small" onClick={removeSelected} />
                         </div>
                         <img 
-                            src={photoUpload}
+                            src={getValues('imageUrl') ?? imageUrl}
                             className="w-full" 
                             alt=''
                         />
@@ -40,9 +61,10 @@ const UploadPhoto = (props: propsType) => {
                             type="file" 
                             ref={inputFileRef}
                             className="none"
+                            accept="image/*"
                             name={name}  
                             value={value}
-                            onChange={onChange}
+                            onChange={handleUploadedFile}
                             onBlur={onBlur}
                         />
                     </>

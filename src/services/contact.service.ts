@@ -11,6 +11,16 @@ class ContactService extends BaseService {
     }
 
     @getData()
+    create(data: any) {
+        return http.post(`${this.path}/create`, data);
+    }
+
+    @getData()
+    update(data: any) {
+        return http.put(`${this.path}/update/${data?.id}`, data);
+    }
+
+    @getData()
     getById(id: string) {
         return http.get(`${this.path}/getById/${id}`);
     }
@@ -32,6 +42,7 @@ export interface Contact {
     createdBy: number;
     address?: Address,
     Company?: Company,
+    imageName?: string | null;
 
     title?: any,
     tag?: any,

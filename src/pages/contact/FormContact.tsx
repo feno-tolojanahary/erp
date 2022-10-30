@@ -24,6 +24,8 @@ import { useNotification } from "@hooks/notification";
 const TYPE_CONTACT = 'contacts';
 const TYPE_COMPANY = 'companies';
 
+const SERVER_IMG_URL = "http://localhost:8000/images/"
+
 type propsType = {
     setNavAction: Dispatch<SetStateAction<NavAction>>,
     contact: Contact,
@@ -34,10 +36,14 @@ type propsType = {
 const FormContact : React.FC<propsType> = (props: propsType) => {
     const { contact, company, address } = props;
     const formButtonRef = useRef<HTMLButtonElement | null>(null);
-    const { control, handleSubmit, setValue, reset, watch, register } = useForm();
+    const { control, handleSubmit, setValue, reset, watch, getValues } = useForm();
     const [formType, setFormType] = useState<string>(TYPE_CONTACT);
     const [companies, setCompanies] = useState([]);
     const { showSuccess, showError } = useNotification();
+
+    const getFullImageUrl = (imageName: string | null | undefined) => {
+        return imageName ? SERVER_IMG_URL + imageName : "";
+    }
 
     useEffect(() => {
         props.setNavAction({
@@ -57,7 +63,10 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
     useEffect(() => {
         if (contact) {
             if (formType === TYPE_CONTACT) {
-                reset(contact);
+                const additionalResetData = {
+                    imageUrl: getFullImageUrl(contact.imageName)
+                }
+                reset({...contact, ...additionalResetData});
                 setValue("companyId", contact.Company?.id);
             } else if (formType === TYPE_COMPANY && contact?.Company) {
                 reset(contact.Company);
@@ -133,6 +142,8 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
                         <div className='w-64'>
                             <UploadPhoto 
                                 control={control}
+                                reset={reset}
+                                getValues={getValues}
                             />
                         </div>
                     </div>
