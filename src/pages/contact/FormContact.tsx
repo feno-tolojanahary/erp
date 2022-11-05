@@ -20,30 +20,30 @@ import SelectSimple from '@components/SelectSimple';
 import contactService, { Contact } from '@services/contact.service';
 import companyService, { Company } from '@services/company.service';
 import { useNotification } from "@hooks/notification";
+import { getImageUrl } from "@helpers/general";
+import { ActionsContext } from '@context/actions';
+import { useLoaderData } from 'react-router-dom';
 
 const TYPE_CONTACT = 'contacts';
 const TYPE_COMPANY = 'companies';
 
-const SERVER_IMG_URL = "http://localhost:8000/images/"
-
 type propsType = {
-    setNavAction: Dispatch<SetStateAction<NavAction>>,
+    setNavAction: Dispatch<SetStateAction<NavAction>>
+}
+
+type LoaderDataType = {
+    address: any,
     contact: Contact,
-    company: Company,
-    address: any
+    company: Company
 }
 
 const FormContact : React.FC<propsType> = (props: propsType) => {
-    const { contact, company, address } = props;
+    const { contact, company, address } = useLoaderData() as LoaderDataType;
     const formButtonRef = useRef<HTMLButtonElement | null>(null);
     const { control, handleSubmit, setValue, reset, watch, getValues } = useForm();
     const [formType, setFormType] = useState<string>(TYPE_CONTACT);
     const [companies, setCompanies] = useState([]);
     const { showSuccess, showError } = useNotification();
-
-    const getFullImageUrl = (imageName: string | null | undefined) => {
-        return imageName ? SERVER_IMG_URL + imageName : "";
-    }
 
     useEffect(() => {
         props.setNavAction({
@@ -64,7 +64,7 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
         if (contact) {
             if (formType === TYPE_CONTACT) {
                 const additionalResetData = {
-                    imageUrl: getFullImageUrl(contact.imageName)
+                    imageUrl: getImageUrl(contact.imageName)
                 }
                 reset({...contact, ...additionalResetData});
                 setValue("companyId", contact.Company?.id);
@@ -311,4 +311,15 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
     )
 }
 
-export default FormContact;
+const FormContactContent = () => (
+    <ActionsContext.Consumer>
+            {({setNavAction}) => 
+                <FormContact
+                    setNavAction={setNavAction}
+                />
+            }
+
+    </ActionsContext.Consumer>
+)
+
+export default FormContactContent;

@@ -3,17 +3,24 @@ import { Contact } from '@services/contact.service';
 import { Company } from '@services/company.service';
 import { NavAction } from '../../context/actions';
 import SelectWithService from '@components/SelectWithService';
-
+import { CardMedia } from "@mui/material"
+import { getImageUrl } from "@helpers/general";
+import { ActionsContext } from '@context/actions';
+import { useLoaderData } from 'react-router-dom';
+ 
 type propsType = {
-    setNavAction: Dispatch<SetStateAction<NavAction>>,
-    contact: Contact,
-    company: Company,
-    address: any
+    setNavAction: Dispatch<SetStateAction<NavAction>>
 }
 
 type propsTextCard = {
     label: string,
     value: string | undefined | null
+}
+
+type LoaderDataType = {
+    address: any,
+    contact: Contact,
+    company: Company
 }
 
 const TextCard = ({label, value}: propsTextCard) => (
@@ -26,7 +33,7 @@ const TextCard = ({label, value}: propsTextCard) => (
 const handleChangeAddressType = () => {}
 
 const ContactDetails : React.FC<propsType> = (props: propsType) => {
-    const { contact, company, address } = props;
+    const { contact, company, address } = useLoaderData() as LoaderDataType;
     const { street, street2, city, zip, country, state = {}, typeId: addressTypeId } = address || {};
     const { jobPosition, phone, mobile, email, website, title, tag } = contact || {}
 
@@ -92,35 +99,45 @@ const ContactDetails : React.FC<propsType> = (props: propsType) => {
                                 
                         </div>
                     </div>
-                    <div className='flex flex-col w-1/2 px-4 mt-10'>
-                        <TextCard
-                            label="Job position"
-                            value={jobPosition}
-                        />
-                        <TextCard
-                            label="Phone"
-                            value={phone}
-                        />
-                        <TextCard
-                            label="Mobile"
-                            value={mobile}
-                        />
-                        <TextCard
-                            label="Email"
-                            value={email}
-                        />
-                        <TextCard
-                            label="Website"
-                            value={website}
-                        />
-                        <TextCard
-                            label="Title"
-                            value={title?.name}
-                        />
-                        <TextCard
-                            label="Tag"
-                            value={tag?.name}
-                        />
+                    <div className='flex flex-col w-1/2 px-4'>
+                        <div className="w-full flex items-end">
+                            <CardMedia
+                                component="img"
+                                sx={{ width: 151 }}
+                                image={getImageUrl(contact?.imageName)}
+                                alt={contact.name}
+                            />
+                        </div>
+                        <div className='w-full mt-1 flex flex-col'>
+                            <TextCard
+                                label="Job position"
+                                value={jobPosition}
+                            />
+                            <TextCard
+                                label="Phone"
+                                value={phone}
+                            />
+                            <TextCard
+                                label="Mobile"
+                                value={mobile}
+                            />
+                            <TextCard
+                                label="Email"
+                                value={email}
+                            />
+                            <TextCard
+                                label="Website"
+                                value={website}
+                            />
+                            <TextCard
+                                label="Title"
+                                value={title?.name}
+                            />
+                            <TextCard
+                                label="Tag"
+                                value={tag?.name}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -128,4 +145,15 @@ const ContactDetails : React.FC<propsType> = (props: propsType) => {
     )
 }
 
-export default ContactDetails;
+const ContactDetailsContent = () => (
+    <ActionsContext.Consumer>
+            {({setNavAction}) => 
+                <ContactDetails
+                    setNavAction={setNavAction}
+                />
+            }
+
+    </ActionsContext.Consumer>
+)
+
+export default ContactDetailsContent;

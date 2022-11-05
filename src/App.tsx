@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import {
-  BrowserRouter,
-  Routes,
-  Route,
+  BrowserRouter, RouterProvider
 } from "react-router-dom";
 import Header from './layout/Header'
-import Contacts from '@pages/contact/index';
-import Contact from "@pages/contact/Contact";
 
 import NavBar from './layout/NavBar';
 import { ActionsContext, NavAction } from './context/actions';
+import router from "./routes/index"
 
 const initialNavAction = {
   button: 'listing',
@@ -29,11 +26,7 @@ const App = () => {
         <NavBar
           navAction={navAction}
         />
-        <Routes>
-          <Route path="/" element={<Contacts/>} />
-          <Route path="contact-list" element={<Contacts/>} />
-          <Route path="contact/:action/:id" element={<Contact/>} />
-        </Routes>
+        <RouterProvider router={router} />
       </ActionsContext.Provider>
     </BrowserRouter>
   );

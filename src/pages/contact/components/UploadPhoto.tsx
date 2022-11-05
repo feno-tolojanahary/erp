@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import photoUpload from "@assets/images/photo.png";
+import { getImageUrl } from "@helpers/general";
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import { Control, Controller, FieldValues, UseFormReset, UseFormGetValues } from "react-hook-form";
@@ -18,7 +18,7 @@ const UploadPhoto = (props: propsType) => {
     } = props;
 
     let inputFileRef = useRef<HTMLInputElement>(null); 
-    const [imageUrl, setImageUrl] = useState<string>(photoUpload);
+    const [imageUrl, setImageUrl] = useState<string>();
 
     const triggerChoose = () => {
         inputFileRef.current?.click();
@@ -34,7 +34,7 @@ const UploadPhoto = (props: propsType) => {
     }
 
     const removeSelected = (_e: any) => {
-        setImageUrl(photoUpload);
+        setImageUrl(getImageUrl(null));
         reset({
             file: null
         });
@@ -53,7 +53,7 @@ const UploadPhoto = (props: propsType) => {
                             <DeleteForeverRoundedIcon fontSize="small" onClick={removeSelected} />
                         </div>
                         <img 
-                            src={getValues('imageUrl') ?? imageUrl}
+                            src={imageUrl ?? getValues('imageUrl')}
                             className="w-full" 
                             alt=''
                         />
