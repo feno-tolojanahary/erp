@@ -10,7 +10,8 @@
             "@helpers/*": ["helpers/*"],
             "@interfaces/*": ["interfaces/*"],
             "@hooks/*": ["hooks/*"],
-            "@assets/*": ["assets/*"]
+            "@assets/*": ["assets/*"],
+            "@globals/*": ["globals/*"]
         }
     }
 }

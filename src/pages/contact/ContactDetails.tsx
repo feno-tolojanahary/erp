@@ -7,6 +7,7 @@ import { CardMedia } from "@mui/material"
 import { getImageUrl } from "@helpers/general";
 import { ActionsContext } from '@context/actions';
 import { useLoaderData } from 'react-router-dom';
+import HeaderRedirectOptions from './components/HeaderRedirectOptions';
  
 type propsType = {
     setNavAction: Dispatch<SetStateAction<NavAction>>
@@ -41,7 +42,7 @@ const ContactDetails : React.FC<propsType> = (props: propsType) => {
         props.setNavAction({
             button: "viewDetail",
             page: 'contactViewDetail',
-            prevUrl: '/contact-list',
+            prevUrl: '/contact',
             nextUrl: `/contact/edit/${contact.id}`
         })
     }, [])    
@@ -49,6 +50,12 @@ const ContactDetails : React.FC<propsType> = (props: propsType) => {
     return (
         <div>
             <div className="container mx-auto ">
+                <HeaderRedirectOptions
+                    invoicedCount={0}
+                    meetingCount={0}
+                    opportunitieCount={0}
+                    saleCount={0}
+                />
                 <div className="flex">
                     <div className='flex flex-col w-1/2 px-2'>
                         <TextCard

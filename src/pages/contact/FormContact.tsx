@@ -23,6 +23,8 @@ import { useNotification } from "@hooks/notification";
 import { getImageUrl } from "@helpers/general";
 import { ActionsContext } from '@context/actions';
 import { useLoaderData } from 'react-router-dom';
+import HeaderRedirectOptions from './components/HeaderRedirectOptions';
+import { CONTACT_PATH } from '@';
 
 const TYPE_CONTACT = 'contacts';
 const TYPE_COMPANY = 'companies';
@@ -49,7 +51,7 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
         props.setNavAction({
             button: contact?.id ? "update" : "create",
             page: 'contactCreateUpdate',
-            prevUrl: '/contact-list',
+            prevUrl: '/contact',
             formButtonRef: formButtonRef
         })
     }, [formButtonRef, contact?.id])                                
@@ -126,6 +128,12 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
             
             <div className="w-full">
                 <div className="container mx-auto ">
+                    <HeaderRedirectOptions
+                        invoicedCount={0}
+                        meetingCount={0}
+                        opportunitieCount={0}
+                        saleCount={0}
+                    />
                     <div className="flex justify-between w-full">
                         <div className='w-80' >
                             <FormControl>
