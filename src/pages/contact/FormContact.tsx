@@ -24,7 +24,7 @@ import { getImageUrl } from "@helpers/general";
 import { ActionsContext } from '@context/actions';
 import { useLoaderData } from 'react-router-dom';
 import HeaderRedirectOptions from './components/HeaderRedirectOptions';
-import { CONTACT_PATH } from '@';
+// import { CONTACT_PATH } from '@';
 
 const TYPE_CONTACT = 'contacts';
 const TYPE_COMPANY = 'companies';
