@@ -1,4 +1,5 @@
 import React from "react";
+import "@globals/index";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 

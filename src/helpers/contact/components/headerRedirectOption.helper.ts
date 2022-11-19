@@ -1,5 +1,5 @@
 import { createElement } from "react";
-import { propsOptionType, propsHeaderOptionType } from "@interfaces/contact/index";
+import { OptionHeader, HeaderRedirectOption } from "@interfaces/contact/index";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import StarIcon from '@mui/icons-material/Star';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
@@ -11,32 +11,37 @@ export const getHeaderRedirectOptions = ({
     opportunitieCount,
     saleCount,
     invoicedCount
-}: propsHeaderOptionType): propsOptionType[] => {
-    const redirectOptions: propsOptionType[] = [
+}: HeaderRedirectOption): OptionHeader[] => {
+    const redirectOptions: OptionHeader[] = [
         {
             icon: createElement(CalendarMonthIcon),
             title: "Meetings",
-            countTitle: meetingCount
+            countTitle: meetingCount,
+            redirectTo: '/meetings'
         },
         {
             icon: createElement(StarIcon),
             title: "Opportunities",
-            countTitle: opportunitieCount
+            countTitle: opportunitieCount,
+            redirectTo: '/opportunities'
         },
         {
             icon: createElement(AttachMoneyIcon),
             title: "Sales",
-            countTitle: saleCount
+            countTitle: saleCount,
+            redirectTo: '/sales'
         },
         {
             icon: createElement(SaveAsIcon),
             title: "Invoiced",
-            countTitle: invoicedCount
+            countTitle: invoicedCount,
+            redirectTo: '/invoiced'
         },
         {
             icon: createElement(PublicIcon),
             title: "Go to",
-            countTitle: "Website"
+            countTitle: "Website",
+            redirectTo: '/website'
         }
     ]
     return redirectOptions;

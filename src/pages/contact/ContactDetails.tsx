@@ -55,6 +55,7 @@ const ContactDetails : React.FC<propsType> = (props: propsType) => {
                     meetingCount={0}
                     opportunitieCount={0}
                     saleCount={0}
+                    contactId={contact.id}
                 />
                 <div className="flex">
                     <div className='flex flex-col w-1/2 px-2'>

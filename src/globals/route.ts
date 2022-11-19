@@ -7,3 +7,4 @@ export const CONTACT_DETAILS_PATH = "/contact/details/:id";
 export const getPath = (path: string, param: string, paramName: string = "id"): string => {
     return path.replace(`:${paramName}`, param);
 }
+

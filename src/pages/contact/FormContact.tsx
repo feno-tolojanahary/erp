@@ -133,6 +133,7 @@ const FormContact : React.FC<propsType> = (props: propsType) => {
                         meetingCount={0}
                         opportunitieCount={0}
                         saleCount={0}
+                        contactId={contact.id}
                     />
                     <div className="flex justify-between w-full">
                         <div className='w-80' >
