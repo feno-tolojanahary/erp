@@ -7,13 +7,10 @@ export interface OptionHeader {
     redirectTo: To
 }
 
-export type propsHeaderOptionType = {
+export interface HeaderRedirectOption {
+    contactId: number,
     meetingCount: number,
     opportunitieCount: number,
     saleCount: number,
     invoicedCount: number
-}
-
-export interface HeaderRedirectOption extends propsHeaderOptionType {
-    contactId: number
 }

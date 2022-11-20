@@ -10,38 +10,39 @@ export const getHeaderRedirectOptions = ({
     meetingCount,
     opportunitieCount,
     saleCount,
-    invoicedCount
+    invoicedCount,
+    contactId
 }: HeaderRedirectOption): OptionHeader[] => {
     const redirectOptions: OptionHeader[] = [
         {
             icon: createElement(CalendarMonthIcon),
             title: "Meetings",
             countTitle: meetingCount,
-            redirectTo: '/meetings'
+            redirectTo: `/meetings/${contactId}`
         },
         {
             icon: createElement(StarIcon),
             title: "Opportunities",
             countTitle: opportunitieCount,
-            redirectTo: '/opportunities'
+            redirectTo: `/opportunities/${contactId}`
         },
         {
             icon: createElement(AttachMoneyIcon),
             title: "Sales",
             countTitle: saleCount,
-            redirectTo: '/sales'
+            redirectTo: `/sales/${contactId}`
         },
         {
             icon: createElement(SaveAsIcon),
             title: "Invoiced",
             countTitle: invoicedCount,
-            redirectTo: '/invoiced'
+            redirectTo: `/invoiced/${contactId}`
         },
         {
             icon: createElement(PublicIcon),
             title: "Go to",
             countTitle: "Website",
-            redirectTo: '/website'
+            redirectTo: `/website/${contactId}`
         }
     ]
     return redirectOptions;

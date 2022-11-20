@@ -6,6 +6,8 @@ import Contacts from '@pages/contact/index';
 import FormContact from "@pages/contact/FormContact";
 import ContactDetails from '@pages/contact/ContactDetails';
 import { getDataContact } from "./loaderData/contact";
+import CalendarMeeting from "@pages/calendarMeeting/index";
+import { getDataMeetingByContact, getDataMeetingByCompany } from "./loaderData/meeting";
 
 const router = createBrowserRouter([
     {
@@ -23,16 +25,24 @@ const router = createBrowserRouter([
             {
                 path: 'edit/:id',
                 element: <FormContact />,
-                loader: ({ params }) => {
-                    return getDataContact(params.id);
-                }
+                loader: ({ params }) => getDataContact(params.id)
             },
             {
                 path: 'details/:id',
                 element: <ContactDetails />,
-                loader: ({ params }) => {
-                    return getDataContact(params.id);
-                }
+                loader: ({ params }) => getDataContact(params.id)
+            }
+        ]
+    },
+    {
+        path: 'meeting',
+        element: <CalendarMeeting/>,
+        loader: () => getDataMeetingByCompany(),
+        children: [
+            {
+                path: ':id',
+                element: <CalendarMeeting />,
+                loader: ({ params }) => getDataMeetingByContact((params.id as unknown) as number)
             }
         ]
     }
